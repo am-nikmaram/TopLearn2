@@ -1,0 +1,16 @@
+﻿
+@model IEnumerable<TopLearn.Core.DTOs.Course.ShowCourseListItemViewModel>
+
+
+@foreach (var item in Model)
+{
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 term-col">
+        <article>
+            <a href="" class="img-layer"><img src="/course/image/@item.CourseImageName"></a>
+            <h2><a href=""> @item.CourseTitle </a></h2>
+            <span> @((item.Courseprice == 0) ? "رایگان " : item.Courseprice.ToString("#,0"))</span>
+            <i>@item.CourseTime</i>
+        </article>
+    </div>
+
+}
