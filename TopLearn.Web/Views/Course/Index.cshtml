@@ -29,6 +29,7 @@
                     @{
                         string filter = ViewBag.filter as string;
                         string sort = ViewBag.sortType as string;
+                        string type = ViewBag.courseType as string;
                     }
                         <div class="input">
                             <input type="text" name="filterTitle" value="@filter" placeholder="موضوع مورد نظر ...">
@@ -38,21 +39,21 @@
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12 pull-right">
                     <div class="switch-field available">
-                        <input id="available-filter-1" name="getType" value="all" checked="" type="radio">
+                        <input id="available-filter-1" name="getType" value="all" checked=@(type=="all" ? "checked":null ) type="radio">
                         <label for="available-filter-1"> همه </label>
-                        <input id="available-filter-2" name="getType" value="buy" type="radio">
+                        <input id="available-filter-2" name="getType" value="buy" checked=@(type=="buy" ? "checked":null ) type="radio">
                         <label for="available-filter-2"> خریدنی </label>
-                        <input id="available-filter-3" name="getType" value="free" type="radio">
+                        <input id="available-filter-3" name="getType" value="free" checked=@(type=="free" ? "checked":null ) type="radio">
                         <label for="available-filter-3"> رایگان </label>
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12 pull-left">
                     <div class="select-ddl">
                         <select name="sortByType">
-                            <option value="Data" @((sort=="Data")?"selected":"")> مرتب سازی </option>
-                            <option value="price" @((sort=="price")?"selected":"")> قیمت </option>
-                            <option value="time" @((sort=="time")?"selected":"")> مدرت زمان دوره </option>
-                            <option value="createDate" @((sort=="createDate")?"selected":"")> تاریخ انتشار </option>
+                            <option value="Data" selected=@(sort=="Data" ? "selected" : null) > مرتب سازی </option>
+                            <option value="price" selected=@(sort=="price"?"selected":null)> قیمت </option>
+                            <option value="time" selected=@(sort=="time"?"selected":null)> مدرت زمان دوره </option>
+                            <option value="createDate" selected=@(sort=="createDate"?"selected": null)> تاریخ انتشار </option>
                         </select>
                     </div>
                 </div>
