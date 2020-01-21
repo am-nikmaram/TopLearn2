@@ -69,7 +69,8 @@
     <None Include="wwwroot\AdminContent\js\plugins\morris\morris.js" />
     <None Include="wwwroot\AdminContent\js\plugins\morris\raphael-2.1.0.min.js" />
     <None Include="wwwroot\AdminContent\js\sb-admin.js" />
-    <None Include="wwwroot\noUiSlider\nouislider.min.js" />
+    <None Include="wwwroot\css\fonts\Material-Design-Iconic-Font.svg" />
+    <None Include="wwwroot\css\fonts\Material-Design-Iconic-Font.woff2" />
   </ItemGroup>
 
   <ItemGroup>

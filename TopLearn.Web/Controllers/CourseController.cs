@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TopLearn.Core.DTOs.Course;
 using TopLearn.Core.Services.Interfaces;
 
 namespace TopLearn.Web.Controllers
@@ -16,12 +15,13 @@ namespace TopLearn.Web.Controllers
         {
             _courseService = courseService;
         }
-      
-
-        public IActionResult Index(int pageId, string filterTitle, string getType, string sortByType, int startPrice, int endPrice, List<int> selectedGroups, int take)
+        public IActionResult Index(int pageId = 1, string filterTitle = "", string getType = "all", string sortByType = "Data", int startPrice = 0, int endPrice = 0, List<int> selectedGroups = null)
         {
-             
-            return View();
+            ViewBag.sortType = sortByType;
+            ViewBag.filter = filterTitle;
+            ViewBag.selectedgroups = selectedGroups;
+            ViewBag.groups = _courseService.GetAllGroup();
+            return View(_courseService.GetCourse( pageId , filterTitle ,  getType , sortByType ,  startPrice , endPrice, selectedGroups ,9));
         }
     }
 }

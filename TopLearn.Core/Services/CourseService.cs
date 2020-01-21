@@ -150,6 +150,14 @@ namespace TopLearn.Core.Services
                 result = result.Where(c => c.Courseprice <= endPrice);
             }
 
+            if (selectedGroups != null && selectedGroups.Any())
+            {
+                foreach (int groupID in selectedGroups)
+                {
+                    result = result.Where(c => c.GroupId == groupID || c.SubGroup == groupID);
+                }
+            }
+
             int pageCount = result.Include(c => c.CourseEpisodes).Skip((pageId - 1) * take).Take(take).Select(c =>
                                 new ShowCourseListItemViewModel()
                                 {

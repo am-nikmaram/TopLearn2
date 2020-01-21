@@ -26,11 +26,11 @@
                         <div class="clientarea">
                             @if (User.Identity.IsAuthenticated)
                             {
-                            <div class="loggein ">
-                                <i class="zmdi zmdi-account"></i><a href=""> @User.Identity.Name ، خوش آمدی </a>
-                                /
-                                <a href="/Logout"> خروج </a>
-                            </div>
+                                <div class="loggein ">
+                                    <i class="zmdi zmdi-account"></i><a href=""> @User.Identity.Name ، خوش آمدی </a>
+                                    /
+                                    <a href="/Logout"> خروج </a>
+                                </div>
                             }
                             else
                             {
@@ -60,8 +60,11 @@
     <!-- /footer -->
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/script.js"></script>
-    <script src="~/js/jquery.validate.min.js"></script>
-    <script src="~/js/jquery.validate.unobtrusive.js"></script>
+    <script src="/js/jquery.validate.min.js"></script>
+    <script src="/js/jquery.validate.unobtrusive.js"></script>
+ 
+
+    @RenderSection("Scripts", false)
 </body>
 </html>
 
