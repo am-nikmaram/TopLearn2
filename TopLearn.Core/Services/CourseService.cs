@@ -158,7 +158,9 @@ namespace TopLearn.Core.Services
                 }
             }
 
-            int pageCount = result.Include(c => c.CourseEpisodes).Skip((pageId - 1) * take).Take(take).Select(c =>
+
+
+            int pageCount = result.Include(c => c.CourseEpisodes).Select(c =>
                                 new ShowCourseListItemViewModel()
                                 {
                                     CourseId = c.CourseId,
@@ -166,7 +168,7 @@ namespace TopLearn.Core.Services
                                     CourseTitle = c.CourseTitle,
                                     CourseImageName = c.CourseImageName,
                                     CourseTime = new TimeSpan(c.CourseEpisodes.Sum(e => e.EpisodeTime.Ticks))
-                                }).ToList().Count() / take;
+                                }).Count()/take;
             var query = result.Include(c => c.CourseEpisodes).Skip((pageId - 1) * take).Take(take).Select(c =>
                 new ShowCourseListItemViewModel()
                 {
@@ -175,7 +177,7 @@ namespace TopLearn.Core.Services
                     CourseTitle = c.CourseTitle,
                     CourseImageName = c.CourseImageName,
                     CourseTime = new TimeSpan(c.CourseEpisodes.Sum(e => e.EpisodeTime.Ticks))
-                }).Skip((pageId - 1) * take).Take(take).ToList();
+                }).ToList();
 
             return Tuple.Create(query, pageCount);
         }

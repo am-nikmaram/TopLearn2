@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using TopLearn.Core.Services.Interfaces;
 
@@ -17,6 +14,7 @@ namespace TopLearn.Web.Controllers
         }
         public IActionResult Index(int pageId = 1, string filterTitle = "", string getType = "all", string sortByType = "Data", int startPrice = 0, int endPrice = 0, List<int> selectedGroups = null)
         {
+            ViewBag.pageId = pageId;
             ViewBag.courseType = getType;
             ViewBag.sortType = sortByType;
             ViewBag.filter = filterTitle;
