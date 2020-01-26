@@ -182,6 +182,16 @@ namespace TopLearn.Core.Services
             return Tuple.Create(query, pageCount);
         }
 
+        public Course GetCourseForShow(int id)
+        {
+            return _context.Courses
+                .Include(c => c.CourseEpisodes)
+                .Include(c => c.User)
+                .Include(c => c.CourseLevel)
+                .Include(c => c.CourseStatus).FirstOrDefault(c => c.CourseId == id);
+
+        }
+
         public Course GetCourseById(int courseId)
         {
             return _context.Courses.Find(courseId);

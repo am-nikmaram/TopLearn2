@@ -27,7 +27,7 @@ namespace TopLearn.Core.Services.Interfaces
         Course GetCourseById(int courseId);
         void UpdateCourse(Course course, IFormFile imgCourse, IFormFile courseDemo);
         Tuple<List<ShowCourseListItemViewModel>,int>  GetCourse(int pageId=1,string filterTitle = "",string getType="all",string sortByType="Date",int startPrice=0,int endPrice=0,List<int> selectedGroups = null,int take=0);
-
+        Course GetCourseForShow(int id);
 
         #endregion
 
@@ -37,6 +37,7 @@ namespace TopLearn.Core.Services.Interfaces
         bool EpisodeFileNameExist(string fileName);
         CourseEpisode GetCourseEpisodeById(int episodeId);
         void UpdateEpisode(CourseEpisode courseEpisode,IFormFile episodeFile);
+        
 
         #endregion
     }
