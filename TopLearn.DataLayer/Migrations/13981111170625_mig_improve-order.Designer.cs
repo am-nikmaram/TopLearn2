@@ -10,8 +10,8 @@ using TopLearn.DataLayer.Context;
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(TopLearnContext))]
-    [Migration("13981007113706_mig_courseGroup")]
-    partial class mig_courseGroup
+    [Migration("13981111170625_mig_improve-order")]
+    partial class mig_improveorder
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,86 @@ namespace TopLearn.DataLayer.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.Course", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CourseDescription")
+                        .IsRequired();
+
+                    b.Property<string>("CourseImageName")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("CourseTitle")
+                        .IsRequired()
+                        .HasMaxLength(450);
+
+                    b.Property<int>("Courseprice");
+
+                    b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("DemoFileName")
+                        .HasMaxLength(100);
+
+                    b.Property<int>("GroupId");
+
+                    b.Property<bool>("IsDelete");
+
+                    b.Property<int>("LevelId");
+
+                    b.Property<int>("StatusId");
+
+                    b.Property<int?>("SubGroup");
+
+                    b.Property<string>("Tags")
+                        .HasMaxLength(600);
+
+                    b.Property<int>("TeacherId");
+
+                    b.Property<DateTime?>("UpdateDate");
+
+                    b.HasKey("CourseId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("LevelId");
+
+                    b.HasIndex("StatusId");
+
+                    b.HasIndex("SubGroup");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
+                {
+                    b.Property<int>("EpisodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId");
+
+                    b.Property<string>("EpisodeFileName");
+
+                    b.Property<TimeSpan>("EpisodeTime");
+
+                    b.Property<string>("EpisodeTitle")
+                        .IsRequired()
+                        .HasMaxLength(400);
+
+                    b.Property<bool>("IsFree");
+
+                    b.HasKey("EpisodeId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseEpisodes");
+                });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseGroup", b =>
                 {
@@ -40,6 +120,80 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("CourseGroups");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseLevel", b =>
+                {
+                    b.Property<int>("LevelId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LevelTitle")
+                        .IsRequired()
+                        .HasMaxLength(150);
+
+                    b.HasKey("LevelId");
+
+                    b.ToTable("CourseLevels");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseStatus", b =>
+                {
+                    b.Property<int>("StatusId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("StatusTitle")
+                        .IsRequired()
+                        .HasMaxLength(150);
+
+                    b.HasKey("StatusId");
+
+                    b.ToTable("CourseStatuses");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsFinaly");
+
+                    b.Property<DateTime>("OrderDate");
+
+                    b.Property<int>("OrderSum");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.OrderDetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<int>("CourseId");
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("Price");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.Permission", b =>
@@ -192,11 +346,67 @@ namespace TopLearn.DataLayer.Migrations
                     b.ToTable("WalletTypes");
                 });
 
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.Course", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup", "CourseGroup")
+                        .WithMany("Courses")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.CourseLevel", "CourseLevel")
+                        .WithMany("Courses")
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.CourseStatus", "CourseStatus")
+                        .WithMany("Courses")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup", "Group")
+                        .WithMany("SubGroup")
+                        .HasForeignKey("SubGroup");
+
+                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
+                        .WithMany("Courses")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
+                        .WithMany("CourseEpisodes")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseGroup", b =>
                 {
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup")
                         .WithMany("CourseGroups")
                         .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.OrderDetail", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.Order.Order", "Order")
+                        .WithMany("OrderDetail")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.Permission", b =>
@@ -211,12 +421,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Permissions.Permission", "Permission")
                         .WithMany("RolePermissions")
                         .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.Role", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>
@@ -224,12 +434,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.User.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Wallet.Wallet", b =>
@@ -237,12 +447,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Wallet.WalletType", "WalletType")
                         .WithMany("Wallets")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
                         .WithMany("Wallets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

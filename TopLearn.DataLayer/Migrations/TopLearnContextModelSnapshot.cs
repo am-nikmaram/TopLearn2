@@ -150,6 +150,50 @@ namespace TopLearn.DataLayer.Migrations
                     b.ToTable("CourseStatuses");
                 });
 
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsFinaly");
+
+                    b.Property<DateTime>("OrderDate");
+
+                    b.Property<int>("OrderSum");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.OrderDetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Count");
+
+                    b.Property<int>("CourseId");
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<int>("Price");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.Permission", b =>
                 {
                     b.Property<int>("PermissionId")
@@ -305,17 +349,17 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup", "CourseGroup")
                         .WithMany("Courses")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseLevel", "CourseLevel")
                         .WithMany("Courses")
                         .HasForeignKey("LevelId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseStatus", "CourseStatus")
                         .WithMany("Courses")
                         .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup", "Group")
                         .WithMany("SubGroup")
@@ -324,7 +368,7 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseEpisode", b =>
@@ -332,7 +376,7 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
                         .WithMany("CourseEpisodes")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.CourseGroup", b =>
@@ -340,6 +384,27 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup")
                         .WithMany("CourseGroups")
                         .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.OrderDetail", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.Order.Order", "Order")
+                        .WithMany("OrderDetail")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Permissions.Permission", b =>
@@ -354,12 +419,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Permissions.Permission", "Permission")
                         .WithMany("RolePermissions")
                         .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.Role", "Role")
                         .WithMany("RolePermissions")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.User.UserRole", b =>
@@ -367,12 +432,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.User.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Wallet.Wallet", b =>
@@ -380,12 +445,12 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Wallet.WalletType", "WalletType")
                         .WithMany("Wallets")
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
                         .WithMany("Wallets")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

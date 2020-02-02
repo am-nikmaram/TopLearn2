@@ -110,7 +110,7 @@ namespace TopLearn.Core.Services
             IQueryable<Course> result = _context.Courses;
             if (filterTitle != "")
             {
-                result = result.Where(c => c.CourseTitle.Contains(filterTitle));
+                result = result.Where(c => c.CourseTitle.Contains(filterTitle)|| c.Tags.Contains(filterTitle));
             }
 
             switch (getType)
