@@ -45,6 +45,7 @@ namespace TopLearn.Core.Services.Interfaces
         int ChargeWallet(string userName, int Amount,string description, bool isPay=false);
         int AddWallet(Wallet wallet);
         void UpdateWallet(Wallet wallet);
+    
         #endregion
 
         #region Admin Panel

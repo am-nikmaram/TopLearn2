@@ -9,5 +9,7 @@ namespace TopLearn.Core.Services.Interfaces
    {
        int AddOrder(int userId,int courseId);
        Order GetActiveOrderForShow(int orderId, int userId);
-   }
+        bool FinalOrder(string userName, int orderId);
+        List<Order> GetUserOrders(string userName);
+    }
 }

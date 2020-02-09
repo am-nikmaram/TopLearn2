@@ -23,6 +23,7 @@ namespace TopLearn.Web.Areas.UserPanel.Controllers
         [Route("UserPanel/Wallet")]
         public IActionResult Index()
         {
+            ViewBag.lastamount = _userService.BalanceUserWallet(User.Identity.Name);
             ViewBag.ListWallet = _userService.GetWalletUser(User.Identity.Name);
             return View();
         }

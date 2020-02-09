@@ -40,8 +40,8 @@ namespace TopLearn.Web.Controllers
         public IActionResult BuyCourse(int id)
         {
             int uId = _userService.GetUserIdByUserName(User.Identity.Name);
-            _orderService.AddOrder(uId, id);
-            return Redirect("/");
+            int orderId=_orderService.AddOrder(uId, id);
+            return Redirect("/UserPanel/MyOrders/ShowOrder?id="+orderId);
         }
     }
 }

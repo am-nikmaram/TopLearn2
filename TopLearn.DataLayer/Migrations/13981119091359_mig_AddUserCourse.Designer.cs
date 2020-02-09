@@ -10,8 +10,8 @@ using TopLearn.DataLayer.Context;
 namespace TopLearn.DataLayer.Migrations
 {
     [DbContext(typeof(TopLearnContext))]
-    [Migration("13981111170625_mig_improve-order")]
-    partial class mig_improveorder
+    [Migration("13981119091359_mig_AddUserCourse")]
+    partial class mig_AddUserCourse
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -150,6 +150,25 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasKey("StatusId");
 
                     b.ToTable("CourseStatuses");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.UserCourse", b =>
+                {
+                    b.Property<int>("UC_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CourseId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("UC_Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCourses");
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>
@@ -386,6 +405,19 @@ namespace TopLearn.DataLayer.Migrations
                     b.HasOne("TopLearn.DataLayer.Entities.Course.CourseGroup")
                         .WithMany("CourseGroups")
                         .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("TopLearn.DataLayer.Entities.Course.UserCourse", b =>
+                {
+                    b.HasOne("TopLearn.DataLayer.Entities.Course.Course", "Course")
+                        .WithMany("UserCourses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TopLearn.DataLayer.Entities.User.User", "User")
+                        .WithMany("UserCourses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("TopLearn.DataLayer.Entities.Order.Order", b =>

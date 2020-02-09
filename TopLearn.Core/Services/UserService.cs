@@ -11,6 +11,7 @@ using TopLearn.Core.Generator;
 using TopLearn.Core.Security;
 using TopLearn.Core.Services.Interfaces;
 using TopLearn.DataLayer.Context;
+using TopLearn.DataLayer.Entities.Order;
 using TopLearn.DataLayer.Entities.User;
 using TopLearn.DataLayer.Entities.Wallet;
 
@@ -186,7 +187,10 @@ namespace TopLearn.Core.Services
             _context.SaveChanges(); 
 
         }
-       // private SaveImage()
+
+
+
+        // private SaveImage()
 
         public EditProfileViewModel GetDataForEditProfileUser(string username)
         {
@@ -321,7 +325,7 @@ namespace TopLearn.Core.Services
         public List<WalletViewModel> GetWalletUser(string userName)
         {
             int userId = GetUserIdByUserName(userName);
-            return _context.Wallets.Where(w => w.IsPay && w.UserId == userId).Select(w => new WalletViewModel()
+            return _context.Wallets.Where(w => w.IsPay && w.UserId == userId).OrderByDescending(w=>w.WalletId).Select(w => new WalletViewModel()
             {
                 Amount = w.Amount,
                 DateTime = w.CreateDate,

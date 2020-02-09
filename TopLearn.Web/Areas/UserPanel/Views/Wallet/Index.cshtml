@@ -44,8 +44,12 @@
                             </form>
                             @{ 
                                 List<TopLearn.Core.DTOs.WalletViewModel> List = ViewBag.ListWallet as List<TopLearn.Core.DTOs.WalletViewModel>;
+                                int lastamount = ViewBag.lastamount;
                             }
                             <hr />
+                            موچودی کیف پول شما    @lastamount.ToString("#,0") تومان می باشد
+                            <hr/>
+                            شرح تراکنش ها
                             <table class="table table-border">
                                 <tr>
                                     <th>مبلغ</th>
@@ -53,7 +57,7 @@
                                     <th>نوع تراکنش</th>
                                     <th>شرح</th>
                                 </tr>
-                                @foreach(var item in List)
+                                @foreach (var item in List)
                                 {
                                 <tr>
                                     <td >@item.Amount.ToString("#,0 تومان")</td>

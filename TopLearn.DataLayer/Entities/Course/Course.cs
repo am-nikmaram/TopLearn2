@@ -74,6 +74,7 @@ namespace TopLearn.DataLayer.Entities.Course
         public CourseGroup Group { get; set; }
 
         public List<CourseEpisode> CourseEpisodes { get; set; }
+        public List<UserCourse> UserCourses { get; set; }
 
 
         #endregion

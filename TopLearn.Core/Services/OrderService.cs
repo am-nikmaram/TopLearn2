@@ -15,12 +15,14 @@ namespace TopLearn.Core.Services
         private ICourseService _courseService;
         private IOrderDetailService _orderDetailService;
         private TopLearnContext _context;
+        private IUserService _userService;
 
-        public OrderService(ICourseService courseService, IOrderDetailService orderDetailService, TopLearnContext context)
+        public OrderService(ICourseService courseService, IOrderDetailService orderDetailService, TopLearnContext context, IUserService userService)
         {
             _courseService = courseService;
             _orderDetailService = orderDetailService;
             _context = context;
+            _userService = userService;
         }
 
         public int AddOrder(int userId, int courseId)
@@ -60,6 +62,7 @@ namespace TopLearn.Core.Services
                         Price = course.Courseprice
                     };
                     _orderDetailService.AddOrderDetail(orderDetail);
+                    
               
                 }
                 else
@@ -67,7 +70,7 @@ namespace TopLearn.Core.Services
                     odetail.Count += 1;
              
                 }
-
+                order.OrderSum += course.Courseprice;
 
             }
             _context.SaveChanges();
@@ -75,10 +78,52 @@ namespace TopLearn.Core.Services
 
         }
 
+        public bool FinalOrder(string userName, int orderId)
+        {
+            int userId = _userService.GetUserIdByUserName(userName);
+            Order order = _context.Orders.Include(o => o.OrderDetail).FirstOrDefault(o => o.OrderId == orderId && !o.IsFinaly && o.UserId==userId);
+            if (order == null)
+                return false;
+
+            if(_userService.BalanceUserWallet(userName)<order.OrderSum)
+            {
+                return false;
+            }
+            else
+            {
+                order.IsFinaly = true;
+                _userService.AddWallet(new DataLayer.Entities.Wallet.Wallet()
+                {
+                    Amount = order.OrderSum,
+                    CreateDate = DateTime.Now,
+                    TypeId = 2,
+                    UserId = userId,
+                    Description = "تراکنش برداشت از حساب بابت فاکتورشماره :" + orderId,
+                    IsPay=true
+                });
+                foreach(var detail in order.OrderDetail)
+                {
+                    _context.UserCourses.Add(new UserCourse()
+                    {
+                        UserId = userId,
+                        CourseId = detail.CourseId
+                    });
+                }
+                _context.SaveChanges();
+                return true;
+            }
+        }
+
         public Order GetActiveOrderForShow(int orderId, int userId)
         {
             return _context.Orders.Include(o => o.OrderDetail).ThenInclude(od => od.Course)
-                .FirstOrDefault(o => o.OrderId == orderId && o.UserId == userId && o.IsFinaly==false);
+                .FirstOrDefault(o => o.OrderId == orderId && o.UserId == userId);
+        }
+
+        public List<Order> GetUserOrders(string userName)
+        {
+            int userId = _userService.GetUserIdByUserName(userName);
+            return _context.Orders.Where(o => o.UserId == userId).OrderByDescending(o => o.OrderId).ToList();
         }
     }
 }
